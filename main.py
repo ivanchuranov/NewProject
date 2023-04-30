@@ -1,16 +1,13 @@
-# This is a sample Python script.
+from telebot import TeleBot
+from peewee import *
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+app = TeleBot("bot")
+
+@app.route('(?!/).+')
+def message_help(message):
+    msg = "(?!/).+"
+    app.send_message(msg)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+app.config['api_key'] = "5796515330:AAGwJExHhRvtEG_GtEyQ1tosguWrJY4CcIk"
+app.poll(debug=True)
