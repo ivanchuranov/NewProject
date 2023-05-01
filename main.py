@@ -1,5 +1,4 @@
 from telebot_router import TeleBot
-
 from peewee import *
 
 app = TeleBot("bot")
