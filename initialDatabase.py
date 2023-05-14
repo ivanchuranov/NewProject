@@ -8,7 +8,7 @@ class BaseModel(Model):
 
 class Roles(BaseModel):
     id = AutoField(column_name="RoleId")
-    username = TextField(column_name="RoleName", null=False)
+    rolename = TextField(column_name="RoleName", null=False)
     class Meta:
         table_name = "Roles"
 Roles.create_table()
@@ -29,6 +29,7 @@ SpecialOffers.create_table()
 
 class User(BaseModel):
     id = AutoField(column_name="UserId")
+    chat_id = IntegerField(column_name="ChatId", null=False)
     is_bot = TextField(column_name="is_bot", null=False)
     first_name = TextField(column_name="first_name", null=False)
     last_name = TextField(column_name="last_name", null=False)
@@ -39,5 +40,9 @@ class User(BaseModel):
         table_name = "User"
 User.create_table()
 
-
-con.close()
+if __name__ == '__main__':
+    ''' role1 = Roles.create(rolename="admin")
+    role1.save()
+    role2 = Roles.create(rolename="client")
+    role2.save()'''
+    con.close()
