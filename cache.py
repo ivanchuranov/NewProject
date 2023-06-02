@@ -1,4 +1,3 @@
-
 from initialDatabase import *
 _cache = {}
 

@@ -1,6 +1,6 @@
 from peewee import *
 
-con = SqliteDatabase('NeBana.sqlite')
+con = SqliteDatabase("data/NeBana.sqlite")
 class BaseModel(Model):
 
     class Meta:
