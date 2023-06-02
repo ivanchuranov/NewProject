@@ -2,21 +2,16 @@ from initialDatabase import *
 _cache = {}
 
 
-def GetInstance(id:int):
+def GetInstance(chat_id:int):
     user = None
-
     try:
-        user = _cache[id]
-        print("В кэше есть.")
+        user = _cache[chat_id]
     except:
-        print("В кэше нет, ищем в БД.")
-
         try:
-            user = User.get(User.id == id)
-            print("В бд есть, кладем в кэш.")
-            _cache[id] = user
+            user = User.get(User.chat_id == chat_id)
+            _cache[chat_id] = user
         except:
-            print("В бд нет.")
+            return None
 
     return user
 
