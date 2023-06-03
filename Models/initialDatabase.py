@@ -15,14 +15,14 @@ Roles.create_table()
 
 class Procedures (BaseModel):
     id = AutoField(column_name="ProceduresId")
-    username = TextField(column_name="ProceduresName", null=False)
+    name = TextField(column_name="ProceduresName", null=False)
     class Meta:
         table_name = "Procedures "
 Procedures.create_table()
 
 class SpecialOffers (BaseModel):
     id = AutoField(column_name="SpecialOffersId")
-    username = TextField(column_name="SpecialOffersName", null=False)
+    name = TextField(column_name="SpecialOffersName", null=False)
     class Meta:
         table_name = "SpecialOffers "
 SpecialOffers.create_table()
