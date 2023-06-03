@@ -10,7 +10,7 @@ class StorageService:
             user = StorageService._cache[chat_id]
         except:
             try:
-                user = User.get(User.chat_id == chat_id)
+                user = Users.get(Users.chat_id == chat_id)
                 StorageService._cache[chat_id] = user
             except:
                 return None
@@ -36,7 +36,7 @@ class StorageService:
         username = context['from']["username"]
         language_code = context['from']["language_code"]
 
-        user = User.create(chat_id=chat_id, is_bot=True, first_name=first_name, last_name=last_name, username=username,
+        user = Users.create(chat_id=chat_id, is_bot=True, first_name=first_name, last_name=last_name, username=username,
                            language_code=language_code, roleid=2)
         user.save()
 
