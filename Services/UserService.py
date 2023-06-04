@@ -1,17 +1,17 @@
 from Models.initialDatabase import *
 
-class StorageService:
+class UserService:
     _cache = {}
 
     @staticmethod
     def GetUserByChatId(chat_id:int):
         user = None
         try:
-            user = StorageService._cache[chat_id]
+            user = UserService._cache[chat_id]
         except:
             try:
                 user = Users.get(Users.chat_id == chat_id)
-                StorageService._cache[chat_id] = user
+                UserService._cache[chat_id] = user
             except:
                 return None
 
@@ -21,10 +21,10 @@ class StorageService:
     def GetUserByContext(context:dict):
         chat_id = context["chat"]["id"]
 
-        user = StorageService.GetUserByChatId(chat_id)
+        user = UserService.GetUserByChatId(chat_id)
 
         if user is None:
-            return StorageService.AddUser(context)
+            return UserService.AddUser(context)
 
         return user
 
@@ -44,5 +44,5 @@ class StorageService:
 
 
 if __name__ == "__main__":
-    user_not_found = StorageService.GetUserByChatId(42094)
+    user_not_found = UserService.GetUserByChatId(42094)
     con.close()
