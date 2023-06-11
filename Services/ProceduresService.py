@@ -9,41 +9,55 @@ class ProceduresService:
         try:
             procedure = ProceduresService._cache[id]
         except:
-            try:
-                procedure = Procedures.get(Procedures.id == id)
+            procedure = ProceduresService.GetProcedureInDb(id)
+            if procedure != None:
                 ProceduresService._cache[id] = procedure
-            except:
-                return None
+
 
         return procedure
 
     @staticmethod
-    def GetProcedure():
-        id = Procedures.id
-
-        procedure = ProceduresService.GetProcedureById(id)
-
-        if procedure is None:
-            return ProceduresService.AddProcedure()
-
-        return procedure
+    def GetProcedureInDb(id):
+        try:
+            procedure = Procedures.get(Procedures.id == id)
+            return procedure
+        except:
+            return None
 
     @staticmethod
-    def AddProcedure():
-        id = Procedures.id
-        name = Procedures.name
-        description = Procedures.description
-        price = Procedures.price
-
-        procedure = Procedures.create(id=id, name=name, description=description, price=price)
+    def AddProcedure(name, description, price):
+        procedure = Procedures.create(name=name, description=description, price=price)
         procedure.save()
 
         return procedure
-    @staticmethod
-    def DelProcedure():
-        procedure = Procedures.delete()
-        procedure.delete()
 
+    @staticmethod
+    def DelProcedure(id):
+        procedure = ProceduresService.GetProcedureInDb(id)
+        if procedure != None:
+            procedure.delete_instance()
+            procedure.save()
+            ProceduresService.ClearCache(id)
+
+    @staticmethod
+    def UpdateProcedure(id, name=None, description=None, price=None):
+        if name != None or description != None or price != None:
+            procedure = ProceduresService.GetProcedureInDb(id)
+            if procedure != None:
+                if name != None and procedure.name != name:
+                    procedure.name = name
+                if description != None and procedure.description != description:
+                    procedure.description = description
+                if price != None and procedure.price != price:
+                    procedure.price = price
+                procedure.save()
+                ProceduresService.ClearCache(id)
+    @staticmethod
+    def ClearCache(id):
+        try:
+            del ProceduresService._cache[id]
+        except:
+            return
 
 if __name__ == "__main__":
     procedure_not_found = ProceduresService.GetProcedureById(42094)

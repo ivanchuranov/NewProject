@@ -37,7 +37,7 @@ class UserService:
         language_code = context['from']["language_code"]
 
         user = Users.create(chat_id=chat_id, is_bot=True, first_name=first_name, last_name=last_name, username=username,
-                           language_code=language_code, roleid=2)
+                           language_code=language_code, role=2)
         user.save()
 
         return user
