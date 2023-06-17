@@ -26,7 +26,7 @@ class Procedures(BaseModel):
 
 Procedures.create_table()
 
-class Sales(BaseModel):
+class SpecialOffer(BaseModel):
     id = AutoField(column_name="id")
     procedure = ForeignKeyField(Procedures, on_delete="cascade", on_update="cascade", to_field="id")
     price = IntegerField(column_name="price", null=False)
@@ -36,7 +36,7 @@ class Sales(BaseModel):
     class Meta:
         table_name = "Sales"
 
-Sales.create_table()
+SpecialOffer.create_table()
 
 class SpecialOffers(BaseModel):
     id = AutoField(column_name="id")
@@ -50,7 +50,17 @@ class SpecialOffers(BaseModel):
         table_name = "SpecialOffers"
 
 SpecialOffers.create_table()
+class Sales(BaseModel):
+    id = AutoField(column_name="id")
+    procedure = TextField(column_name="procedure", null=False)
+    price = IntegerField(column_name="price", null=False)
+    endDate = DateTimeField(column_name="endDate",null=False)
+    malingDate = DateTimeField(column_name="malingDate",null=False)
 
+    class Meta:
+        table_name = "Sales"
+
+Sales.create_table()
 class SpecialOffersProcedures(BaseModel):
     specialOffer = ForeignKeyField(SpecialOffers, on_delete="cascade", on_update="cascade", to_field="id")
     procedure = ForeignKeyField(Procedures, on_delete="cascade", on_update="cascade", to_field="id")
