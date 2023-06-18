@@ -1,5 +1,6 @@
 from Models.initialDatabase import *
-
+from Services.SpecialOffersProceduresService import SpecialOfferProcedureService
+from Services.SpecialOffersService import SpecialOffersService
 class ProceduresService:
     _cache = {}
 
@@ -29,16 +30,19 @@ class ProceduresService:
         procedure = Procedures.create(name=name, description=description, price=price)
         procedure.save()
 
+        LogFactory.logger.info(f"Добавлена новая процедура {name}.")
+
         return procedure
 
     @staticmethod
     def DelProcedure(id):
         procedure = ProceduresService.GetProcedureInDb(id)
         if procedure != None:
+            name = procedure.name
             procedure.delete_instance()
             procedure.save()
             ProceduresService.ClearCache(id)
-
+            LogFactory.logger.info(f"Удалена процедура {name}.")
     @staticmethod
     def UpdateProcedure(id, name=None, description=None, price=None):
         if name != None or description != None or price != None:
@@ -58,6 +62,33 @@ class ProceduresService:
             del ProceduresService._cache[id]
         except:
             return
+
+    @staticmethod
+    def GetProcedureText(id):
+        procedure = ProceduresService.GetProcedureById(id)
+        text = "Такой процедуры не существует."
+
+        if procedure != None:
+            text = f"{procedure.name}\n{procedure.price} рублей"
+
+            sOffersIds = SpecialOfferProcedureService.FindSpecialOffersForProcedure(procedure)
+
+            if len(sOffersIds) > 0:
+                text += "\nУчаствует в спец предложениях:\n"
+
+            for id in sOffersIds:
+                sOffer = SpecialOffersService.GetSpecialOffersById(id)
+
+                if sOffer != None:
+                    text += f"* {sOffer.name}\n"
+
+
+        return text
+
+
+# Запускается код, если ты запускаешь этот файл
+# Прикол в томЮ что когда ты импортируешь этот файл
+# то кодЮ не занесенный в этот if запустится
 
 if __name__ == "__main__":
     procedure_not_found = ProceduresService.GetProcedureById(42094)

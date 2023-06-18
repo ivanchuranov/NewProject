@@ -1,5 +1,6 @@
 from Models.initialDatabase import *
 
+
 class SalesService:
     _cache = {}
 
@@ -28,7 +29,7 @@ class SalesService:
     def AddSale(procedure, price, endDate, malingDate):
         sale = Sales.create(procedure=procedure, price=price, endDate=endDate, malingDate=malingDate)
         sale.save()
-
+        LogFactory.logger.info(f"Добавлена скидка на {procedure}.")
         return sale
 
     @staticmethod
@@ -38,7 +39,7 @@ class SalesService:
             sale.delete_instance()
             sale.save()
             SalesService.ClearCache(id)
-
+            LogFactory.logger.info(f"Удалена скидка на {sale.procedure}.")
     @staticmethod
     def UpdateSale(id, procedure=None, price=None, endDate=None, malingDate=None):
         if procedure != None or price != None or endDate != None or malingDate != None:

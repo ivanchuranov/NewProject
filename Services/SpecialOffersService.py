@@ -28,7 +28,7 @@ class SpecialOffersService:
     def AddSpecialOffers(name, description, price, endDate, malingDate):
         specialoffer = SpecialOffers.create(name=name, description=description, price=price, endDate=endDate, malingDate=malingDate)
         specialoffer.save()
-
+        LogFactory.logger.info(f"Добавлена новое специальное предложение {name}.")
         return specialoffer
 
     @staticmethod
@@ -38,7 +38,7 @@ class SpecialOffersService:
             specialoffer.delete_instance()
             specialoffer.save()
             SpecialOffersService.ClearCache(id)
-
+            LogFactory.logger.info(f"Удалено специальное предложение {specialoffer.name}.")
     @staticmethod
     def UpdateSale(id, name=None,description=None, price=None, endDate=None, malingDate=None):
         if name != None or description != None or price != None or endDate != None or malingDate != None:

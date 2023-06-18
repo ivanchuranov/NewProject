@@ -31,15 +31,28 @@ class UserService:
     @staticmethod
     def AddUser(context:dict):
         chat_id = context["chat"]["id"]
-        first_name = context['from']["first_name"]
-        last_name = context['from']["last_name"]
-        username = context['from']["username"]
+
+        try:
+            first_name = context['from']["first_name"]
+        except:
+            first_name = ""
+
+        try:
+            last_name = context['from']["last_name"]
+        except:
+            last_name = ""
+
+        try:
+            username = context['from']["username"]
+        except:
+            username = ""
+
         language_code = context['from']["language_code"]
 
         user = Users.create(chat_id=chat_id, is_bot=True, first_name=first_name, last_name=last_name, username=username,
                            language_code=language_code, role=2)
         user.save()
-
+        LogFactory.logger.info(f"Добавлен новый пользователь {chat_id}.")
         return user
 
 

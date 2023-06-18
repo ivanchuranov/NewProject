@@ -1,7 +1,8 @@
 from Models.initialDatabase import *
 
+
 class OrdersService:
-    _cache = {}
+    _cache = {} # снестиы
 
     @staticmethod
     def GetOrderById(id:int):
@@ -28,7 +29,7 @@ class OrdersService:
     def AddOrder(total, user, date, comment):
         order = Orders.create(total=total, user=user, date=date, comment=comment)
         order.save()
-
+        LogFactory.logger.info(f"Добавлен заказ {total} на пользователя {user}.")
         return order
 
     @staticmethod
@@ -38,7 +39,7 @@ class OrdersService:
             order.delete_instance()
             order.save()
             OrdersService.ClearCache(id)
-
+            LogFactory.logger.info(f"Удален заказ {order.total} на пользователя {order.user}.")
     @staticmethod
     def UpdateOrder(id, total=None, user=None, date=None, comment=None):
         if total != None or user != None or date != None or comment != None:

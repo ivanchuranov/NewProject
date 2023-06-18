@@ -1,7 +1,8 @@
 from Models.initialDatabase import *
 
+
 class RolesService:
-    _cache = {}
+    _cache = {} # снестиы
 
     @staticmethod
     def GetRoleById(id:int):
@@ -28,7 +29,7 @@ class RolesService:
     def AddRole(rolename):
         role = Roles.create(rolename=rolename)
         role.save()
-
+        LogFactory.logger.info(f"Добавлена роль {rolename}.")
         return role
 
     @staticmethod
@@ -38,7 +39,7 @@ class RolesService:
             role.delete_instance()
             role.save()
             RolesService.ClearCache(id)
-
+            LogFactory.logger.info(f"Удалена роль {role.rolename}.")
     @staticmethod
     def UpdateRole(id, rolename=None):
         if rolename != None:
