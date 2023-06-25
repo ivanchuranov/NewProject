@@ -2,20 +2,8 @@ from Models.initialDatabase import *
 from Services.SpecialOffersProceduresService import SpecialOfferProcedureService
 from Services.SpecialOffersService import SpecialOffersService
 class ProceduresService:
-    _cache = {}
-
-    @staticmethod
-    def GetProcedureById(id:int):
-        procedure = None
-        try:
-            procedure = ProceduresService._cache[id]
-        except:
-            procedure = ProceduresService.GetProcedureInDb(id)
-            if procedure != None:
-                ProceduresService._cache[id] = procedure
 
 
-        return procedure
 
     @staticmethod
     def GetProcedureInDb(id):
@@ -41,7 +29,6 @@ class ProceduresService:
             name = procedure.name
             procedure.delete_instance()
             procedure.save()
-            ProceduresService.ClearCache(id)
             LogFactory.logger.info(f"Удалена процедура {name}.")
     @staticmethod
     def UpdateProcedure(id, name=None, description=None, price=None):
@@ -55,17 +42,29 @@ class ProceduresService:
                 if price != None and procedure.price != price:
                     procedure.price = price
                 procedure.save()
-                ProceduresService.ClearCache(id)
+
+
     @staticmethod
-    def ClearCache(id):
-        try:
-            del ProceduresService._cache[id]
-        except:
-            return
+    def GetProceduresText():
+        procedures  = Procedures.select()
+        # Процедура 1
+        # Описание. цена и т.п.
+        #
+        # Процедура 2
+
+        text = "Сейчас процедур нет."
+
+        if len(procedures) > 0:
+            text = "Вот наш список процеду:\n"
+            for procedure in procedures:
+                discription = ProceduresService.GetProcedureText(id)
+                text += f"\n{discription}\n"
+
+        return text
 
     @staticmethod
     def GetProcedureText(id):
-        procedure = ProceduresService.GetProcedureById(id)
+        procedure = ProceduresService.GetProcedureInDb(id)
         text = "Такой процедуры не существует."
 
         if procedure != None:
@@ -77,7 +76,7 @@ class ProceduresService:
                 text += "\nУчаствует в спец предложениях:\n"
 
             for id in sOffersIds:
-                sOffer = SpecialOffersService.GetSpecialOffersById(id)
+                sOffer = SpecialOffersService.GetSpecialOfferInDb(id)
 
                 if sOffer != None:
                     text += f"* {sOffer.name}\n"
@@ -91,5 +90,4 @@ class ProceduresService:
 # то кодЮ не занесенный в этот if запустится
 
 if __name__ == "__main__":
-    procedure_not_found = ProceduresService.GetProcedureById(42094)
     con.close()

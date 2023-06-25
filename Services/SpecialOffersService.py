@@ -1,20 +1,8 @@
 from Models.initialDatabase import *
-
+from Services.SpecialOffersProceduresService import SpecialOfferProcedureService
+from Services.ProceduresService import ProceduresService
 class SpecialOffersService:
-    _cache = {}
 
-    @staticmethod
-    def GetSpecialOffersById(id:int):
-        specialoffer = None
-        try:
-            specialoffer = SpecialOffersService._cache[id]
-        except:
-            specialoffer = SpecialOffersService.GetSpecialOfferInDb(id)
-            if specialoffer != None:
-                SpecialOffersService._cache[id] = specialoffer
-
-
-        return specialoffer
 
     @staticmethod
     def GetSpecialOfferInDb(id):
@@ -37,10 +25,9 @@ class SpecialOffersService:
         if specialoffer != None:
             specialoffer.delete_instance()
             specialoffer.save()
-            SpecialOffersService.ClearCache(id)
             LogFactory.logger.info(f"Удалено специальное предложение {specialoffer.name}.")
     @staticmethod
-    def UpdateSale(id, name=None,description=None, price=None, endDate=None, malingDate=None):
+    def UpdateSpecialOffer(id, name=None,description=None, price=None, endDate=None, malingDate=None):
         if name != None or description != None or price != None or endDate != None or malingDate != None:
             specialoffer = SpecialOffersService.GetSpecialOfferInDb(id)
             if specialoffer != None:
@@ -55,14 +42,25 @@ class SpecialOffersService:
                 if malingDate != None and malingDate.price != malingDate:
                     specialoffer.malingDate = malingDate
                 specialoffer.save()
-                SpecialOffersService.ClearCache(id)
+
+
     @staticmethod
-    def ClearCache(id):
-        try:
-            del SpecialOffersService._cache[id]
-        except:
-            return
+    def GetSpecialOfferText(id):
+        specialoffer = SpecialOffersService.GetSpecialOfferInDb(id)
+        text = "Такого специального предложения не существует."
+
+        if specialoffer != None:
+            text = f"{specialoffer.name} ...\n"
+            connections = SpecialOfferProcedureService.FindProceduresForSpecialOffer(specialoffer)
+            if len(connections) > 0:
+                text += "Процедуры участвующии в спец предложении:\n"
+
+                for connection in connections:
+                    proc = ProceduresService.GetProcedureInDb(connection.procedure)
+                    text += f"* {proc.name}"
+        return text
+
+
 
 if __name__ == "__main__":
-    specialoffer_not_found = SpecialOffersService.GetSpecialOffersById(42094)
     con.close()

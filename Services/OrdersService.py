@@ -2,20 +2,7 @@ from Models.initialDatabase import *
 
 
 class OrdersService:
-    _cache = {} # снестиы
 
-    @staticmethod
-    def GetOrderById(id:int):
-        order = None
-        try:
-            order = OrdersService._cache[id]
-        except:
-            order = OrdersService.GetOrderInDb(id)
-            if order != None:
-                OrdersService._cache[id] = order
-
-
-        return order
 
     @staticmethod
     def GetOrderInDb(id):
@@ -38,7 +25,6 @@ class OrdersService:
         if order != None:
             order.delete_instance()
             order.save()
-            OrdersService.ClearCache(id)
             LogFactory.logger.info(f"Удален заказ {order.total} на пользователя {order.user}.")
     @staticmethod
     def UpdateOrder(id, total=None, user=None, date=None, comment=None):
@@ -54,14 +40,6 @@ class OrdersService:
                 if comment != None and comment.price != comment:
                     order.comment = comment
                 order.save()
-                OrdersService.ClearCache(id)
-    @staticmethod
-    def ClearCache(id):
-        try:
-            del OrdersService._cache[id]
-        except:
-            return
 
 if __name__ == "__main__":
-    order_not_found = OrdersService.GetOrderById(42094)
     con.close()

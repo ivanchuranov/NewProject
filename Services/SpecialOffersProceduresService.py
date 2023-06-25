@@ -14,5 +14,6 @@ class SpecialOfferProcedureService:
         return spOffers
 
     @staticmethod
-    def FindProcedureForSpecialOffer():
-        pass
+    def FindProceduresForSpecialOffer(specialoffer):
+        procedures = SpecialOffersProcedures.select().where(SpecialOffersProcedures.specialOffer == specialoffer.id)
+        return procedures
