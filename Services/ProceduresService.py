@@ -1,9 +1,9 @@
 from Models.initialDatabase import *
 from Services.SpecialOffersProceduresService import SpecialOfferProcedureService
 from Services.SpecialOffersService import SpecialOffersService
+from Services.LogFactory import LogFactory
+
 class ProceduresService:
-
-
 
     @staticmethod
     def GetProcedureInDb(id):

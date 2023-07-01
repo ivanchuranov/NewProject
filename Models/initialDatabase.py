@@ -45,7 +45,6 @@ class SpecialOffers(BaseModel):
     price = IntegerField(column_name="price", null=False)
     endDate = DateTimeField(column_name="endDate",null=False)
     malingDate = DateTimeField(column_name="malingDate",null=False)
-
     class Meta:
         table_name = "SpecialOffers"
 
@@ -78,6 +77,7 @@ class Users(BaseModel):
     last_name = TextField(column_name="lastName", null=False)
     username = TextField(column_name="username", null=True)
     language_code = TextField(column_name="languageCode", null=False)
+    description = TextField(column_name="description", null=True)
     role = ForeignKeyField(Roles, on_delete="cascade", on_update="cascade", to_field="id")
     class Meta:
         table_name = "Users"

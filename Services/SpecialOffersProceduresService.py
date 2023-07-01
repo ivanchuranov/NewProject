@@ -1,4 +1,5 @@
 from Models.initialDatabase import *
+from Services.LogFactory import LogFactory
 class SpecialOfferProcedureService:
     @staticmethod
     def AddDependence(procedure, specialoffer):

@@ -1,6 +1,7 @@
 from Models.initialDatabase import *
 from Services.SpecialOffersProceduresService import SpecialOfferProcedureService
 from Services.ProceduresService import ProceduresService
+from Services.LogFactory import LogFactory
 class SpecialOffersService:
 
 
