@@ -1,10 +1,11 @@
 class Action:
-    def __init__(self, data_converter, question):
+    def __init__(self, data_converter, question, action_name):
         self.user_data = None
         self.data_converter = data_converter
         self.completed = False
         self.question = question
         self.isInvoked = False
+        self.action_name = action_name
         # в 17:00
         # 10:00
         # 10
