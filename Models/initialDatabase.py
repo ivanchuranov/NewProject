@@ -26,17 +26,18 @@ class Procedures(BaseModel):
 
 Procedures.create_table()
 
-class SpecialOffer(BaseModel):
+class Sales(BaseModel):
     id = AutoField(column_name="id")
     procedure = ForeignKeyField(Procedures, on_delete="cascade", on_update="cascade", to_field="id")
     price = IntegerField(column_name="price", null=False)
+    description = TextField(column_name="description", null=True)
     endDate = DateTimeField(column_name="endDate", null=False)
     malingDate = DateTimeField(column_name="malingDate", null=False)
 
     class Meta:
         table_name = "Sales"
 
-SpecialOffer.create_table()
+Sales.create_table()
 
 class SpecialOffers(BaseModel):
     id = AutoField(column_name="id")
@@ -109,4 +110,8 @@ if __name__ == '__main__':
     role1.save()
     role2 = Roles.create(rolename="client")
     role2.save()'''
+
+    connections = SpecialOffersProcedures.select().where(SpecialOffersProcedures.specialOffer == 1)
+    for conn in connections:
+        print(conn.procedure.name)
     con.close()

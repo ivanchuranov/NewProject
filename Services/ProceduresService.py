@@ -1,16 +1,14 @@
 from Models.initialDatabase import *
-from Services.SpecialOffersProceduresService import SpecialOfferProcedureService
-from Services.SpecialOffersService import SpecialOffersService
 from Services.LogFactory import LogFactory
 
 class ProceduresService:
 
     @staticmethod
-    def GetProcedureInDb(id):
+    def GetProcedureInDb(id_val):
         try:
-            procedure = Procedures.get(Procedures.id == id)
+            procedure = Procedures.get(Procedures.id == id_val)
             return procedure
-        except:
+        except Exception as ex:
             return None
 
     @staticmethod
@@ -57,7 +55,7 @@ class ProceduresService:
         if len(procedures) > 0:
             text = "Вот наш список процеду:\n"
             for procedure in procedures:
-                discription = ProceduresService.GetProcedureText(id)
+                discription = ProceduresService.GetProcedureText(procedure.id)
                 text += f"\n{discription}\n"
 
         return text
@@ -70,16 +68,13 @@ class ProceduresService:
         if procedure != None:
             text = f"{procedure.name}\n{procedure.price} рублей"
 
-            sOffersIds = SpecialOfferProcedureService.FindSpecialOffersForProcedure(procedure)
+            sOffersIds = SpecialOffersProcedures.select().where(SpecialOffersProcedures.procedure == procedure.procedure_id)
 
             if len(sOffersIds) > 0:
                 text += "\nУчаствует в спец предложениях:\n"
 
             for id in sOffersIds:
-                sOffer = SpecialOffersService.GetSpecialOfferInDb(id)
-
-                if sOffer != None:
-                    text += f"* {sOffer.name}\n"
+                text += f"* {id.specialOffer.name}\n"
 
 
         return text

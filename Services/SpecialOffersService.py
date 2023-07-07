@@ -1,16 +1,12 @@
 from Models.initialDatabase import *
-from Services.SpecialOffersProceduresService import SpecialOfferProcedureService
-from Services.ProceduresService import ProceduresService
 from Services.LogFactory import LogFactory
 class SpecialOffersService:
-
-
     @staticmethod
     def GetSpecialOfferInDb(id):
         try:
             specialoffer = SpecialOffers.get(SpecialOffers.id == id)
             return specialoffer
-        except:
+        except Exception as ex:
             return None
 
     @staticmethod
@@ -52,13 +48,12 @@ class SpecialOffersService:
 
         if specialoffer != None:
             text = f"{specialoffer.name} ...\n"
-            connections = SpecialOfferProcedureService.FindProceduresForSpecialOffer(specialoffer)
+            connections = SpecialOffersProcedures.select().where(SpecialOffersProcedures.specialOffer == id)
             if len(connections) > 0:
                 text += "Процедуры участвующии в спец предложении:\n"
 
                 for connection in connections:
-                    proc = ProceduresService.GetProcedureInDb(connection.procedure)
-                    text += f"* {proc.name}"
+                    text += f"* {connection.procedure.name}"
         return text
 
 
