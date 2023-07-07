@@ -1,4 +1,5 @@
 from Models.ActionList import ActionList
+from Services.ProceduresService import ProceduresService
 from Services.CustomProcedures.AboutProcedureGenerator import AboutProcedureGenerator
 
 class ActionListService:
@@ -16,8 +17,16 @@ class ActionListService:
 
     @staticmethod
     def TryContinueProcedure():
-        pass
+        proc = ActionList.GetCurrentAction()
+        if proc is not None:
+            ActionList.StartProcedure()
+        else:
+            return None
 
     @staticmethod
     def RemoveProcedure():
-        pass
+        proc = ActionListService.TryContinueProcedure()
+        if proc is None:
+            ProceduresService.DelProcedure(id)
+        else:
+            ActionListService.TryContinueProcedure()
